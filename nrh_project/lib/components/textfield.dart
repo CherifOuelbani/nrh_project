@@ -20,7 +20,7 @@ class Textfield extends StatelessWidget {
             keyboardType: TextInputType.name,
             decoration: InputDecoration(
               
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
               hintText: hinttext ,
               prefixIcon: icon ,
               iconColor: Colors.black,
