@@ -19,7 +19,7 @@ final VoidCallback onPressed ;
         child: MaterialButton(
           onPressed: onPressed,
           minWidth: 378,
-          height: 62,
+          height: 55,
           child: Text(title,
           style: TextStyle(
             color:colortext,
