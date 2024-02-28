@@ -16,7 +16,27 @@ class _Sign_up_1State extends State<Sign_up_1> {
   textTheme: GoogleFonts.lexendTextTheme(),
     ),
     home: Scaffold(
-      body: 
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only( top: 40),
+            child: Icon(Icons.arrow_back_outlined),        
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text('Create your Account' , style:
+            TextStyle(fontWeight:FontWeight.w900 ,color: Color.fromARGB(255, 8, 21, 158),
+            fontSize: 30 ) 
+            ,),
+          ),
+          Text('Elevate your HR managment with NRH' , style:
+          TextStyle(fontWeight:FontWeight.w300 ,color: Colors.black,
+          fontSize: 20 ) 
+          ,)
+
+        ],
+      )
 
     ),);
   
