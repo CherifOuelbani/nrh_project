@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Textfield extends StatelessWidget {
   const Textfield({required this.hinttext ,required this.icon});
@@ -23,7 +22,7 @@ class Textfield extends StatelessWidget {
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
               hintText: hinttext ,
               prefixIcon: icon ,
-              iconColor: Colors.black,
+              iconColor:  Colors.grey,
               
             ),
             
