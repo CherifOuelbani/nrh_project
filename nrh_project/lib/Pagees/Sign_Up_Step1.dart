@@ -5,8 +5,9 @@ import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
 import 'package:validators/validators.dart';
-
+import 'package:http/http.dart' as http;
 import '../components/Dropdown.dart';
+
 
 class Sign_up_1 extends StatefulWidget {
  
@@ -20,7 +21,41 @@ class _Sign_up_1State extends State<Sign_up_1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
  bool isEmailCorrect = false;
  String dropdownValue ='Manager HR';
- 
+ TextEditingController _emailController = TextEditingController();
+ TextEditingController _dropdownController = TextEditingController();
+ String verificationemail="";
+ Future<void> verifyemail() async {
+  try {
+    print('a');
+    final url = 'http://10.0.2.2:5000/api/verifyemail'; 
+    final response = await http.post(
+      Uri.parse(url),
+      body:  {
+        'email': _emailController.text,
+      },
+      
+    );
+    print(response);
+    if (response.statusCode == 200) {
+      
+      print('Response body: ${response.body}');
+      print('Registration successful');
+    } else {
+      setState(() {
+          verificationemail = 'Email is already taken'; // Or use the message from API
+        });
+      
+      print('Registration failed: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  } catch (e) {
+    print('Error connecting to the server: $e');
+  }
+}
+  void initState() {
+    super.initState();
+    _dropdownController.text = 'Manager HR'; // Initialize dropdown value
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +118,7 @@ class _Sign_up_1State extends State<Sign_up_1> {
                       isEmailCorrect = isEmail(val);
                     });
                 },
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   
@@ -125,10 +161,10 @@ Padding(
               ),
             ),
            MyDropdown(
-              dropdownValue: dropdownValue,
+              dropdownValue: _dropdownController.text,
               onChanged: (String? newValue) {
                 setState(() {
-                  dropdownValue = newValue!;
+                   _dropdownController.text = newValue!;
                 });
               },
             ),
@@ -147,18 +183,47 @@ Padding(
                   color: Color.fromRGBO(113, 82, 243, 1),
                   colortext: Colors.white,
                   title: 'Continue',
-                  onPressed: () {
+                  onPressed: () async{
                     
-                       if (_formKey.currentState!.validate()){
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => sign_up_2()),);
-                       }
-                      
+                     if (_formKey.currentState!.validate())  {
+    await verifyemail();
+    if (verificationemail.isNotEmpty) {
+      // If verification email is not empty, display message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Email Verification'),
+            content: Text(verificationemail),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Proceed to the next step if email is valid and verification message is empty
+      Navigator.push(
+        context,
+        CupertinoPageRoute(builder: (context) => sign_up_2(
+          email: _emailController.text, 
+          role: _dropdownController.text
+        )),
+      );
+    }
+  }
+               
+                    
                     }
+                   
                     
             ),),
+              
                   ],
                 ),
           )),

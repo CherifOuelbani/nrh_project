@@ -5,9 +5,12 @@ import 'package:nrh_project/Pagees/Sign_Up_Step1.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
+import 'package:http/http.dart' as http;
 
 class sign_up_2 extends StatefulWidget {
-  sign_up_2({super.key});
+   final String email;
+  final String role;
+  sign_up_2({super.key, required this.email, required this.role});
 
   @override
   State<sign_up_2> createState() => _sign_up_2State();
@@ -15,6 +18,38 @@ class sign_up_2 extends StatefulWidget {
 
 class _sign_up_2State extends State<sign_up_2> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _cinController = TextEditingController();
+   String verificationcin='';
+  Future<void> verifycin() async {
+  try {
+    print('a');
+    final url = 'http://10.0.2.2:5000/api/verifycin'; 
+    final response = await http.post(
+      Uri.parse(url),
+      body:  {
+        'cin': _cinController.text,
+      },
+      
+    );
+    print(response);
+    if (response.statusCode == 200) {
+      
+      print('Response body: ${response.body}');
+      print('Registration successful');
+    } else {
+      setState(() {
+          verificationcin = 'CIN is unvalid'; // Or use the message from API
+        });
+      
+      print('Registration failed: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  } catch (e) {
+    print('Error connecting to the server: $e');
+  }
+}
   @override
   Widget build(BuildContext context) {
     
@@ -75,6 +110,7 @@ class _sign_up_2State extends State<sign_up_2> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   keyboardType: TextInputType.name,
+                  controller: _firstNameController,
                   decoration: InputDecoration(
                     
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -104,6 +140,7 @@ class _sign_up_2State extends State<sign_up_2> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   keyboardType: TextInputType.name,
+                  controller: _lastNameController,
                   decoration: InputDecoration(
                     
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -133,6 +170,7 @@ class _sign_up_2State extends State<sign_up_2> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   keyboardType: TextInputType.number,
+                  controller: _cinController,
                   decoration: InputDecoration(
                     
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -150,21 +188,56 @@ class _sign_up_2State extends State<sign_up_2> {
               ),
                
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 150),
-                child: Button(
-                    color: Color.fromRGBO(113, 82, 243, 1),
-                    colortext: Colors.white,
-                    title: 'Continue',
-                    onPressed: () {
-                       if (_formKey.currentState!.validate()){
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => sign_up_3()),);
-                       }
-                      else{}
-                    }),
-              ),
+  padding: const EdgeInsets.only(left: 15, top: 150),
+  child: Builder(
+    builder: (BuildContext context) {
+      return Button(
+        color: Color.fromRGBO(113, 82, 243, 1),
+        colortext: Colors.white,
+        title: 'Continue',
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            await verifycin();
+            if (verificationcin.isNotEmpty) {
+              // If verification email is not empty, display message
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Re-enter a CIN'),
+                    content: Text(verificationcin),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => sign_up_3(
+                    email: widget.email,
+                    role: widget.role,
+                    firstName: _firstNameController.text,
+                    lastName: _lastNameController.text,
+                    cin: _cinController.text,
+                  ),
+                ),
+              );
+            }
+          }
+        },
+      );
+    },
+  ),
+),
+
                     ],
                   ),
             ),
