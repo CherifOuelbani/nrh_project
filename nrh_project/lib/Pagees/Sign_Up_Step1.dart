@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nrh_project/Pagees/Login_Page.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
@@ -173,7 +174,10 @@ Padding(
               child: Row(
                 children: [
                   Text('Already have an Account ?'),
-                  TextButton(onPressed: () {}, child: Text('Login'))
+                  TextButton(onPressed: () {  Navigator.push(
+        context,
+        CupertinoPageRoute(builder: (context) => Login()),
+      );}, child: Text('Login'))
                 ],
               ),
             ),

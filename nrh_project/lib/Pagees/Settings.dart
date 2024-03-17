@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/CompanyProfile.dart';
+import 'package:nrh_project/Pagees/Login_Page.dart';
 import 'package:nrh_project/Pagees/Personnal_info.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
 import 'package:nrh_project/Pagees/proffesional_Infi.dart';
@@ -24,6 +25,7 @@ class _SettingsState extends State<Settings> {
       _selectedIndex = index;
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +206,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               MaterialButton(
                                 onPressed: () {
+                                  
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
@@ -343,7 +346,13 @@ class _SettingsState extends State<Settings> {
                                     side: BorderSide(
                                         color: Colors.red, width: 1.5),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                      Navigator.push(
+        context,
+        CupertinoPageRoute(builder: (context) => Login(
+        )),
+      );
+                                  },
                                   minWidth: 350,
                                   height: 57,
                                   child: Text(

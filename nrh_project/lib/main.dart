@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:nrh_project/Pagees/Absences_1.dart';
+import 'package:nrh_project/Pagees/Login_Page.dart';
+import 'package:nrh_project/Pagees/RequestAbsence.dart';
 import 'package:nrh_project/Pagees/Settings.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step5.dart';
@@ -31,7 +34,7 @@ class MyApp extends StatelessWidget {
 ),
       debugShowCheckedModeBanner: false,
       title: 'ChatApp',
-      home: Sign_up_1(),
+      home: Absence_1(),
   
      );
     
