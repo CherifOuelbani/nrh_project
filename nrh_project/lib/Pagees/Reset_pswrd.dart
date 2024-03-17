@@ -45,14 +45,14 @@ class _ResetPswrdState extends State<ResetPswrd> {
       );
 
       if (response.statusCode == 200) {
-        // Assuming the OTP page takes an argument for the email or OTP token
+        
         Navigator.pushNamed(
           context,
           OTPpage.screenRoute,
           arguments: {'email': email},
         );
       } else {
-        // Decode the response body to get the error message
+       
         final responseBody = json.decode(response.body);
         final errorMessage = responseBody['message'] ?? 'Failed to send OTP';
         _showDialog(context, 'Error', errorMessage);
@@ -142,7 +142,7 @@ class _ResetPswrdState extends State<ResetPswrd> {
                           hintText: "enter your email",
                           prefixIcon: Icon(Icons.email,
                               color: Colors
-                                  .grey), // Use prefixIcon instead of icon
+                                  .grey), 
                         ),
                         validator: validateEmail,
                       ),
@@ -159,10 +159,10 @@ class _ResetPswrdState extends State<ResetPswrd> {
                   color: Color((0xFF7152F3)),
                   colortext: Color((0xFFFFFFFF)),
                   title: 'Send code',
-                  // Assuming this is part of your Flutter app code
+                  
                   onPressed: () {
                     if (_formKeyy.currentState!.validate()) {
-                      // If the form is valid (i.e., the email is valid), call sendOtp
+                      
                       sendOtp(_emailController.text, context);
                     }
                   },

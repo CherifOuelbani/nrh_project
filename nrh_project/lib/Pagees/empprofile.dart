@@ -1,42 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:jwt_decode/jwt_decode.dart';
-
-class Profile extends StatefulWidget {
-  const Profile({super.key});
-  static const String screenRoute = 'Profile';
-
+class empage extends StatefulWidget {
+  final Map<String, dynamic> employeeData;
+  const empage({Key? key, required this.employeeData}) : super(key: key);
+  static const String screenRoute = 'empprofile';
   @override
-  State<Profile> createState() => _ProfileState();
+  State<empage> createState() => _empageState();
 }
 
-class _ProfileState extends State<Profile> {
-  Map<String, dynamic> employeeData = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserInformation();
-  }
-
-  void _loadUserInformation() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
-
-    if (token != null) {
-      Map<String, dynamic> payload = Jwt.parseJwt(token);
-      setState(() {
-        employeeData = payload;
-      });
-    }
-  }
-
+class _empageState extends State<empage> {
   @override
   Widget build(BuildContext context) {
-    
+    Map<String, dynamic> employeeData = widget.employeeData;
     return MaterialApp(
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
@@ -88,7 +65,7 @@ class _ProfileState extends State<Profile> {
                               width: 8,
                             ),
                             Text(
-                              "${employeeData['lastname'] ?? 'Loading...'}",
+                              "${widget.employeeData['lastname'] ?? 'Loading...'}",
                               style: TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 16,
@@ -127,7 +104,7 @@ class _ProfileState extends State<Profile> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                           
+                            
                             Text(
                               "First Name",
                               style: TextStyle(
@@ -144,7 +121,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 18),
-                          
+                         
                             Text(
                               "Last Name",
                               style: TextStyle(
@@ -161,7 +138,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 18),
-                            
+                          
                             Text(
                               "Date of Birth",
                               style: TextStyle(
@@ -194,7 +171,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 18),
-                           
+                            
                             Text(
                               "Phone Number",
                               style: TextStyle(
@@ -309,7 +286,7 @@ class _ProfileState extends State<Profile> {
                 child: CircleAvatar(
                   radius: 44,
                   backgroundImage: NetworkImage(
-                      'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg'), 
+                      'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg'), // Replace with your image URL
                 ),
               ),
             ],
@@ -317,5 +294,6 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+    ;
   }
 }

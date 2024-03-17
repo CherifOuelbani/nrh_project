@@ -21,22 +21,22 @@ class Modify extends StatefulWidget {
 class _ModifyState extends State<Modify> {
   TextEditingController _Passwordcontroller = TextEditingController();
   TextEditingController _confirmpasswordcontroller = TextEditingController();
-  String? userEmail; // Add this line to store the email
+  String? userEmail; 
 
   @override
   void initState() {
     super.initState();
-    // Assuming you're using Future.delayed to wait for the context to be available
-    // This is a workaround to access context in initState
+    
+   
     Future.delayed(Duration.zero, () {
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      userEmail = arguments['email']; // Retrieve and store the email
+      userEmail = arguments['email']; 
     });
   }
 
   bool _isPasswordStrong(String password) {
-    // Password must contain at least 8 characters, including uppercase letters,
-    // lowercase letters, numbers, and special characters.
+    
+    
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     RegExp regExp = RegExp(pattern);
@@ -181,7 +181,7 @@ class _ModifyState extends State<Modify> {
                     if (_formKey.currentState!.validate()) {
                       if (_Passwordcontroller.text !=
                           _confirmpasswordcontroller.text) {
-                        // Show error message if passwords don't match
+                        
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -209,16 +209,16 @@ class _ModifyState extends State<Modify> {
                               'Content-Type': 'application/json; charset=UTF-8',
                             },
                             body: jsonEncode(<String, String>{
-                              'email': userEmail!, // Use the userEmail here
+                              'email': userEmail!, 
                               'password': _Passwordcontroller.text,
                             }),
                           );
 
-                          // Handle the response (success or failure) as shown in the previous instructions
-                          // ...
+                         
+                        
                         } catch (e) {
-                          // Handle unexpected errors
-                          // ...
+                         
+                        
                         }
                         Navigator.popAndPushNamed(context, Login.screenRoute);
                       }

@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
 import 'package:nrh_project/Pagees/Reset_pswrd.dart';
 import 'package:nrh_project/Pagees/welcome_page.dart';
-
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:nrh_project/components/button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -23,39 +23,45 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String? validateEmail(String? value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern.toString());
+    RegExp regex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!regex.hasMatch(value!))
       return 'Enter Valid Email';
     else
       return null;
   }
 
-  // Add the login function here
+ 
   Future<bool> login(String email, String password) async {
-    final url = Uri.parse(
-        'http://10.0.2.2:5000/api/login'); // Replace with your actual endpoint
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'emailorcin': email, 'password': password}),
-    );
+    final Uri url = Uri.parse(
+        'http://10.0.2.2:5000/api/login'); 
+    try {
+      final response = await http.post(
+        url,
+        headers: const {'Content-Type': 'application/json'},
+        body: jsonEncode({'emailorcin': email, 'password': password}),
+      );
+      //print(response.body);
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final String token =
+            responseData['token']; 
+        Navigator.popAndPushNamed(context, Personnes.screenRoute);
+      
+        Map<String, dynamic> userInfo = Jwt.parseJwt(token);
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      Navigator.popAndPushNamed(context, Personnes.screenRoute);
+       
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+        await prefs.setString('userInfo', json.encode(userInfo));
 
-      // Assuming the token is returned in the response body under 'token'
-      final String token = responseData['token'];
-
-      // Save the token using SharedPreferences
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-
-      return true;
-    } else {
-      print("error");
+        return true;
+      } else {
+        print("Login error: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Exception caught: $e");
       return false;
     }
   }
@@ -90,7 +96,6 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  // Existing code...
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -116,9 +121,9 @@ class _LoginState extends State<Login> {
                         (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed)) {
                             return Colors
-                                .transparent; // Return a transparent color for the pressed state
+                                .transparent;
                           }
-                          return null; // For other states, return null which uses the default overlay color
+                          return null; 
                         },
                       ),
                     ),
@@ -171,7 +176,7 @@ class _LoginState extends State<Login> {
                           hintText: "enter your email",
                           prefixIcon: Icon(Icons.email,
                               color: Colors
-                                  .grey), // Use prefixIcon instead of icon
+                                  .grey), 
                         ),
                         validator: validateEmail,
                       ),
@@ -250,9 +255,9 @@ class _LoginState extends State<Login> {
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed)) {
                               return Colors
-                                  .transparent; // Return a transparent color for the pressed state
+                                  .transparent; 
                             }
-                            return null; // For other states, return null which uses the default overlay color
+                            return null; 
                           },
                         ),
                       ),
@@ -283,7 +288,7 @@ class _LoginState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.only(right: 25.0),
                     child: Container(
-                      width: 150, // adjust this value as needed
+                      width: 150, 
                       child: Divider(
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
@@ -339,7 +344,7 @@ class _LoginState extends State<Login> {
                   color: Color((0xFF7152F3)),
                   colortext: Color((0xFFFFFFFF)),
                   title: 'Log In',
-                  // Inside your Button's onPressed callback
+                  
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final email = _emailController.text;
@@ -349,9 +354,9 @@ class _LoginState extends State<Login> {
 
                       if (isLoggedIn) {
                         print("good");
-                        // Navigate to your home screen or another appropriate screen
+                       
                       } else {
-                        // Show an error message using a dialog
+                        
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -364,7 +369,7 @@ class _LoginState extends State<Login> {
                                   child: Text("OK"),
                                   onPressed: () {
                                     Navigator.of(context)
-                                        .pop(); // Dismiss the dialog
+                                        .pop(); 
                                   },
                                 ),
                               ],

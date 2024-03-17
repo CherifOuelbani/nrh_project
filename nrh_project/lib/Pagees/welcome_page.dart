@@ -58,28 +58,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     )
                   ],
                 ),
-                Spacer(
-                    flex:
-                        1), 
+                Spacer(flex: 1),
                 MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () {},
-                  color: Colors.white, 
-                  elevation: 0.0, 
+                  color: Colors.white,
+                  elevation: 0.0,
                   shape: RoundedRectangleBorder(
-                    side:
-                        BorderSide(color: Colors.grey, width: 1.0), // Add this
+                    side: BorderSide(color: Colors.grey, width: 1.0),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: Container(
-                    width: double
-                        .infinity, // Ensure the button takes the full width
+                    width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Image.asset(
-                          "images/google 1.png", // Replace with the actual path to your Google logo asset
+                          "images/google 1.png",
                           height: 30,
                           width: 30,
                         ),
@@ -96,9 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                 ),
-                Spacer(
-                    flex:
-                        1), // Spacer to center the "Sign Up With Google" button
+                Spacer(flex: 1),
                 Button(
                   color: Color((0xFF7152F3)),
                   colortext: Color((0xFFFFFFFF)),

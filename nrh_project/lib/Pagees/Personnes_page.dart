@@ -1,23 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Profile.dart';
+import 'package:nrh_project/Pagees/Social.dart';
+import 'package:nrh_project/Pagees/calendrier.dart';
 import 'package:nrh_project/components/personne.dart';
 import 'package:nrh_project/components/NavBar.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nrh_project/Pagees/empprofile.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Personnes extends StatefulWidget {
   const Personnes({Key? key}) : super(key: key);
   static const String screenRoute = 'Personnes_page';
+
   @override
   _PersonnesState createState() => _PersonnesState();
 }
 
 class _PersonnesState extends State<Personnes> {
+  Map<String, dynamic> data = {};
   int _selectedIndex = 0;
+  List<dynamic> employees = []; 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInformation();
+    _fetchAndSetEmployees(); 
+    _selectedIndex = 4;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    if (index == 1) {
+      Navigator.pushNamed(context, Social.screenRoute);
+    }
+    if (index == 4) {
+      Navigator.pushNamed(context, Personnes.screenRoute);
+    }
+    if (index == 3) {
+      Navigator.pushNamed(context, calendrier.screenRoute);
+    }
+  }
+
+  void _loadUserInformation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token != null) {
+      Map<String, dynamic> payload = Jwt.parseJwt(token);
+      setState(() {
+        data = payload;
+      });
+    }
+  }
+
+  void _fetchAndSetEmployees() async {
+    final fetchedEmployees = await fetchEmployees();
+    setState(() {
+      employees = fetchedEmployees;
+    });
+  }
+
+  Future<List<dynamic>> fetchEmployees() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+    print("Token: $token");
+    final Uri url = Uri.parse(
+        'http://10.0.2.2:5000/api/employees/'); 
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': '$token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> employees = json.decode(response.body)['employees'];
+        return employees;
+      } else {
+        print(
+            'Failed to load employees. Status code: ${response.statusCode}. Response body: ${response.body}');
+        throw Exception('Failed to load employees');
+      }
+    } catch (e) {
+      print('Exception caught: $e');
+      throw Exception('Failed to load employees: $e');
+    }
   }
 
   @override
@@ -31,7 +108,7 @@ class _PersonnesState extends State<Personnes> {
           selectedIndex: _selectedIndex,
           onItemTapped: _onItemTapped,
         ),
-        backgroundColor: Color.fromARGB(249, 249, 249, 249),
+        backgroundColor: Color.fromARGB(251, 251, 251, 251),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -63,10 +140,10 @@ class _PersonnesState extends State<Personnes> {
                   decoration: InputDecoration(
                     fillColor: Color.fromARGB(255, 255, 255, 255),
                     filled: true,
-                    // Adjust the vertical padding to reduce the height of the TextFormField
+                    
                     contentPadding: EdgeInsets.symmetric(
                         vertical: 5,
-                        horizontal: 10.0), // Reduced vertical padding
+                        horizontal: 10.0), 
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide:
@@ -91,82 +168,65 @@ class _PersonnesState extends State<Personnes> {
               Padding(
                 padding: const EdgeInsets.only(top: 3.0, left: 20, right: 20),
                 child: Personne(
-                  picture: ClipOval(
-                    child: Image.network(
-                      'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
-                      height: 45,
-                      width: 45,
+                    picture: ClipOval(
+                      child: Image.network(
+                        'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
+                        height: 45,
+                        width: 45,
+                      ),
                     ),
-                  ),
-                  firstname: 'Joe',
-                  secondname: 'Delgado',
-                  onPressed: () {
-                    Navigator.pushNamed(context, Profile.screenRoute);
-                  },
-                ),
+                    firstname: "${data['firstname'] ?? 'Loading...'}",
+                    secondname: "${data['lastname'] ?? 'Loading...'}",
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, Profile.screenRoute);
+                    }),
               ),
-              SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  width: 500,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Column(
-                    children: [
-                      Personne(
-                        picture: ClipOval(
-                          child: Image.network(
-                            'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
-                            height: 45,
-                            width: 45,
+                padding: const EdgeInsets.only(
+                  left: 18,
+                  right: 18,
+                ),
+                child: ListView.builder(
+                  shrinkWrap:
+                      true, 
+                  physics:
+                      NeverScrollableScrollPhysics(), 
+                  itemCount: employees.length,
+                  itemBuilder: (context, index) {
+                    var employee = employees[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 1),
+                      child: Personne(
+                          picture: ClipOval(
+                            child: Image.network(
+                              employee['imageUrl'] ??
+                                  'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
+                              height: 45,
+                              width: 45,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                
+                                return const Icon(
+                                    Icons.error); 
+                              },
+                            ),
                           ),
-                        ),
-                        firstname: 'Joe',
-                        secondname: 'delgado',
-                        onPressed: () {},
-                      ),
-                      Personne(
-                        picture: ClipOval(
-                          child: Image.network(
-                            'https://www.befunky.com/images/wp/wp-2021-01-linkedin-profile-picture-focus-face.jpg?auto=avif,webp&format=jpg&width=944',
-                            height: 45,
-                            width: 45,
-                          ),
-                        ),
-                        firstname: 'Sarra',
-                        secondname: 'Doe',
-                        onPressed: () {},
-                      ),
-                      Personne(
-                        picture: ClipOval(
-                          child: Image.network(
-                            'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
-                            height: 45,
-                            width: 45,
-                          ),
-                        ),
-                        firstname: 'John',
-                        secondname: 'Doe',
-                        onPressed: () {},
-                      ),
-                      Personne(
-                        picture: ClipOval(
-                          child: Image.network(
-                            'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
-                            height: 45,
-                            width: 45,
-                          ),
-                        ),
-                        firstname: 'John',
-                        secondname: 'Doe',
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                          firstname: employee['firstname'] ??
+                              'Unknown', 
+                          secondname: employee['lastname'] ??
+                              'Unknown', 
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    empage(employeeData: employee),
+                              ),
+                            );
+                          }),
+                    );
+                  },
                 ),
               ),
             ],

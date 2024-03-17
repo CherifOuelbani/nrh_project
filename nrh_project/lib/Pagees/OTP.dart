@@ -30,7 +30,7 @@ class _OTPpageState extends State<OTPpage> {
   Future<void> verifyOtp() async {
     final String otp = _otpDigits.join();
     final String apiUrl =
-        "http://10.0.2.2:5000/api/forgetpassword/verifyotp"; // Corrected URL
+        "http://10.0.2.2:5000/api/forgetpassword/verifyotp"; 
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
@@ -42,17 +42,17 @@ class _OTPpageState extends State<OTPpage> {
       }),
     );
 
-    // The rest of your method remains unchanged...
+    
 
     if (response.statusCode == 200) {
-      // Handle success
+      
       Navigator.pushNamed(
         context,
         Modify.screenRoute,
         arguments: {'email': widget.email},
       );
     } else {
-      // Handle failure
+      
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -160,44 +160,42 @@ class _OTPpageState extends State<OTPpage> {
 
   Widget _textFieldOTP(BuildContext context, int index) {
     return Flexible(
-      // Wrap in a Flexible widget
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4), // Add margin for spacing
-        // Adjust the height if necessary
-        child: AspectRatio(
-          aspectRatio: 0.8, // Adjust the aspect ratio for a better fit
-          child: TextFormField(
-            focusNode: _focusNodes[index],
-            autofocus: index == 0,
-            onChanged: (value) {
-              if (value.length == 1 && index < _focusNodes.length - 1) {
-                FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
-              }
-              if (value.length == 0 && index > 0) {
-                FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
-              }
+        margin: EdgeInsets.symmetric(horizontal: 8), 
+        child: TextFormField(
+          focusNode: _focusNodes[index],
+          autofocus: index == 0,
+          onChanged: (value) {
+            if (value.length == 1 && index < _focusNodes.length - 1) {
+              FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+            }
+            if (value.isEmpty && index > 0) {
+              FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+            }
+            setState(() {
               _otpDigits[index] = value;
-            },
-            showCursor: false,
-            readOnly: false,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(1),
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            decoration: InputDecoration(
-              counter: Offstage(),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Colors.black12),
-                  borderRadius: BorderRadius.circular(12)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 2, color: const Color.fromARGB(255, 60, 39, 176)),
-                  borderRadius: BorderRadius.circular(12)),
-              fillColor: Color.fromARGB(255, 182, 182, 182),
+            });
+          },
+          showCursor: true, 
+          readOnly: false,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(1),
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: InputDecoration(
+            counter: Offstage(),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(width: 2, color: Colors.grey.shade400),
             ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(width: 2, color: Color.fromARGB(255, 60, 39, 176)),
+            ),
+            
           ),
         ),
       ),

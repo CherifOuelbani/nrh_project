@@ -30,13 +30,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
         selectedItemColor: Color.fromRGBO(113, 82, 243, 1),
         unselectedItemColor: Color.fromARGB(255, 87, 87, 87),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.timer), label: "Pointer"),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled), label: "Absence"),
+              icon: Icon(Icons.timer_outlined), label: "Pointer"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: "Calendar"),
-          BottomNavigationBarItem(icon: Icon(Icons.widgets), label: "Plus"),
+              icon: Icon(Icons.people_outlined), label: "Social"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Absence"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_outlined), label: "Calendar"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.widgets_outlined), label: "Plus"),
         ],
       ),
     );
