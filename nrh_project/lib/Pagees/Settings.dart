@@ -8,7 +8,7 @@ import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
 import 'package:nrh_project/Pagees/proffesional_Infi.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
-
+import 'package:validators/validators.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -18,14 +18,12 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +130,13 @@ class _SettingsState extends State<Settings> {
                           child: Column(
                             children: [
                               MaterialButton(
-                                onPressed: () {Navigator.push(
+                                onPressed: () {
+                                  Navigator.push(
                                     context,
                                     CupertinoPageRoute(
                                         builder: (context) => CompanyProfile()),
-                                  );},
+                                  );
+                                },
                                 color: Colors.white,
                                 elevation: 0,
                                 height: 60,
@@ -206,7 +206,6 @@ class _SettingsState extends State<Settings> {
                               ),
                               MaterialButton(
                                 onPressed: () {
-                                  
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
@@ -347,11 +346,11 @@ class _SettingsState extends State<Settings> {
                                         color: Colors.red, width: 1.5),
                                   ),
                                   onPressed: () {
-                                      Navigator.push(
-        context,
-        CupertinoPageRoute(builder: (context) => Login(
-        )),
-      );
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) => Login()),
+                                    );
                                   },
                                   minWidth: 350,
                                   height: 57,

@@ -8,7 +8,7 @@ import 'package:nrh_project/components/textfield.dart';
 import 'package:http/http.dart' as http;
 
 class sign_up_2 extends StatefulWidget {
-   final String email;
+  final String email;
   final String role;
   sign_up_2({super.key, required this.email, required this.role});
 
@@ -21,38 +21,36 @@ class _sign_up_2State extends State<sign_up_2> {
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _cinController = TextEditingController();
-   String verificationcin='';
+  String verificationcin = '';
   Future<void> verifycin() async {
-  try {
-    print('a');
-    final url = 'http://10.0.2.2:5000/api/verifycin'; 
-    final response = await http.post(
-      Uri.parse(url),
-      body:  {
-        'cin': _cinController.text,
-      },
-      
-    );
-    print(response);
-    if (response.statusCode == 200) {
-      
-      print('Response body: ${response.body}');
-      print('Registration successful');
-    } else {
-      setState(() {
+    try {
+      print('a');
+      final url = 'http://10.0.2.2:5000/api/verifycin';
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'cin': _cinController.text,
+        },
+      );
+      print(response);
+      if (response.statusCode == 200) {
+        print('Response body: ${response.body}');
+        print('Registration successful');
+      } else {
+        setState(() {
           verificationcin = 'CIN is unvalid'; // Or use the message from API
         });
-      
-      print('Registration failed: ${response.statusCode}');
-      print('Response body: ${response.body}');
+
+        print('Registration failed: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error connecting to the server: $e');
     }
-  } catch (e) {
-    print('Error connecting to the server: $e');
   }
-}
+
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -60,20 +58,20 @@ class _sign_up_2State extends State<sign_up_2> {
       ),
       home: Scaffold(
           body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
                   padding: const EdgeInsets.only(top: 40, left: 10),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_outlined),
                     onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => Sign_up_1()),);
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder: (context) => Sign_up_1()),
+                      );
                     },
                   )),
               Padding(
@@ -112,18 +110,17 @@ class _sign_up_2State extends State<sign_up_2> {
                   keyboardType: TextInputType.name,
                   controller: _firstNameController,
                   decoration: InputDecoration(
-                    
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                    hintText: 'First name' ,
-                    prefixIcon: const Icon(Icons.person) ,
-                ),
-                validator: (value) {
-                  if(value!.isEmpty)
-                  {
-                    return 'Please enter first name';
-                  }
-                  return null ;
-                },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'First name',
+                    prefixIcon: const Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter first name';
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -142,18 +139,17 @@ class _sign_up_2State extends State<sign_up_2> {
                   keyboardType: TextInputType.name,
                   controller: _lastNameController,
                   decoration: InputDecoration(
-                    
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                    hintText: 'Second name' ,
-                    prefixIcon: const Icon(Icons.person) ,
-                ),
-                validator: (value) {
-                  if(value!.isEmpty)
-                  {
-                    return 'Please enter Second name';
-                  }
-                  return null ;
-                },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'Second name',
+                    prefixIcon: const Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter Second name';
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -172,76 +168,73 @@ class _sign_up_2State extends State<sign_up_2> {
                   keyboardType: TextInputType.number,
                   controller: _cinController,
                   decoration: InputDecoration(
-                    
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                    hintText: 'CIN' ,
-                    prefixIcon: const Icon(Icons.card_membership) ,
-                ),
-                validator: (value) {
-                  if(value!.isEmpty)
-                  {
-                    return 'Please enter Your CIN';
-                  }
-                  return null ;
-                },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'CIN',
+                    prefixIcon: const Icon(Icons.card_membership),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter Your CIN';
+                    }
+                    return null;
+                  },
                 ),
               ),
-               
               Padding(
-  padding: const EdgeInsets.only(left: 15, top: 150),
-  child: Builder(
-    builder: (BuildContext context) {
-      return Button(
-        color: Color.fromRGBO(113, 82, 243, 1),
-        colortext: Colors.white,
-        title: 'Continue',
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            await verifycin();
-            if (verificationcin.isNotEmpty) {
-              // If verification email is not empty, display message
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Re-enter a CIN'),
-                    content: Text(verificationcin),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => sign_up_3(
-                    email: widget.email,
-                    role: widget.role,
-                    firstName: _firstNameController.text,
-                    lastName: _lastNameController.text,
-                    cin: _cinController.text,
-                  ),
+                padding: const EdgeInsets.only(left: 15, top: 150),
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return Button(
+                      color: Color.fromRGBO(113, 82, 243, 1),
+                      colortext: Colors.white,
+                      title: 'Continue',
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await verifycin();
+                          if (verificationcin.isNotEmpty) {
+                            // If verification email is not empty, display message
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Re-enter a CIN'),
+                                  content: Text(verificationcin),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => sign_up_3(
+                                  email: widget.email,
+                                  role: widget.role,
+                                  firstName: _firstNameController.text,
+                                  lastName: _lastNameController.text,
+                                  cin: _cinController.text,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    );
+                  },
                 ),
-              );
-            }
-          }
-        },
-      );
-    },
-  ),
-),
-
-                    ],
-                  ),
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 }

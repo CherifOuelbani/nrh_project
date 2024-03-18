@@ -7,7 +7,7 @@ import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:validators/validators.dart';
 
 class CompanyProfile extends StatefulWidget {
   const CompanyProfile({super.key});

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:nrh_project/Pagees/Absences_1.dart';
 import 'package:nrh_project/Pagees/calendrier.dart';
 import 'package:nrh_project/components/article.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,12 @@ class _SocialState extends State<Social> {
     }
     if (index == 3) {
       Navigator.pushNamed(context, calendrier.screenRoute);
+    }
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Absence_1()),
+      );
     }
   }
 

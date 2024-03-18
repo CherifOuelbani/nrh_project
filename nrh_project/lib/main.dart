@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Sign_up_1(),
+      home: Login(),
       //initialRoute: WelcomeScreen.screenRoute,
       routes: {
         WelcomeScreen.screenRoute: (context) => WelcomeScreen(),
