@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:nrh_project/Pagees/ADDarticle.dart';
 import 'package:nrh_project/Pagees/calendrier.dart';
@@ -13,6 +15,20 @@ import 'Pagees/welcome_page.dart';
 import 'Pagees/Login_page.dart';
 import 'Pagees/Profile.dart';
 import 'pagees/ModifyPswrd.dart';
+import 'package:nrh_project/Pagees/Absences_1.dart';
+import 'package:nrh_project/Pagees/RequestAbsence.dart';
+import 'package:nrh_project/Pagees/Settings.dart';
+import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
+import 'package:nrh_project/Pagees/Sign_up_Step5.dart';
+import 'package:nrh_project/components/Dropdown.dart';
+
+import 'Pagees/Sign_up_Step2.dart';
+import 'components/button.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'components/textfield.dart';
+import 'components/pack.dart';
+import 'Pagees/Sign_Up_Step1.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -26,7 +42,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: Sign_up_1(),
       //initialRoute: WelcomeScreen.screenRoute,
       routes: {
         WelcomeScreen.screenRoute: (context) => WelcomeScreen(),

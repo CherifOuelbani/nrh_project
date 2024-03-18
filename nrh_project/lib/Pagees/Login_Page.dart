@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:nrh_project/Pagees/Absences_1.dart';
 import 'package:nrh_project/Pagees/CompanyProfile.dart';
 import 'package:nrh_project/Pagees/Personnal_info.dart';
 import 'package:nrh_project/Pagees/Settings.dart';
@@ -50,10 +49,10 @@ class _LoginState extends State<Login> {
         final responseData = json.decode(response.body);
         final String token =
             responseData['token']; // Extracting the token from the response
-        Navigator.push(
-          context,
-          CupertinoPageRoute(builder: (context) => Absence_1()),
-        );
+         Navigator.push(
+        context,
+        CupertinoPageRoute(builder: (context) => Settings()),
+      );
         // Decode the token to get user information
         Map<String, dynamic> userInfo = Jwt.parseJwt(token);
 
@@ -120,7 +119,9 @@ class _LoginState extends State<Login> {
                   ),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () {},
+                    onPressed: () {
+                     
+                    },
                     style: ButtonStyle(
                       overlayColor: MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
@@ -245,7 +246,9 @@ class _LoginState extends State<Login> {
                     ),
                     Spacer(),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        
+                      },
                       child: Text(
                         'Forgot Password?',
                         style: TextStyle(

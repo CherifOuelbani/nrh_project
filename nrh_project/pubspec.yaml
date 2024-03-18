@@ -33,8 +33,9 @@ dependencies:
   shared_preferences: ^2.0.13
   jwt_decode: ^0.3.0
   table_calendar: ^3.0.0  # Check for the latest version on pub.dev
-
-  image_picker: ^0.8.5+3    
+  file_picker: ^4.5.0
+  image_picker: ^0.8.5+3 
+     
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,6 +43,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   http: 1.1.0
+  validators: ^3.0.0
 
 dev_dependencies:
   flutter_test:
