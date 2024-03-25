@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
 ),
       debugShowCheckedModeBanner: false,
       title: 'ChatApp',
-      home: Absence_1(),
+      home: Sign_up_1(),
   
      );
     
