@@ -49,7 +49,7 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
       setState(() {
         _userInfo = userInfo;
         _firstNameController.text = _userInfo!['firstname'] ?? '';
-        _lastNameController.text = _userInfo!['secondname'] ?? '';
+        _lastNameController.text = _userInfo!['lastname'] ?? '';
         _emailController.text = _userInfo!['email'] ?? '';
         _cinController.text = _userInfo!['cin'] ?? '';
         _phoneNumberController.text = _userInfo!['phonenumber'] ?? '';
@@ -101,7 +101,7 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
         },
         body: jsonEncode(<String, dynamic>{
           'firstname': firstname,
-          'secondname': lastname,
+          'lastname': lastname,
           'email': email,
           'cin': cin,
           'phoneNumber': phoneNumber,
@@ -114,8 +114,8 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         // Update successful, handle success scenario
         setState(() {
-          _firstNameController.text = responseData['firstName'];
-          _lastNameController.text = responseData['secondName'];
+          _firstNameController.text = responseData['firstname'];
+          _lastNameController.text = responseData['lastname'];
           _emailController.text = responseData['email'];
           _cinController.text = responseData['cin'];
           _phoneNumberController.text = responseData['phoneNumber'];
