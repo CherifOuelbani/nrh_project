@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Login_page.dart';
+import 'package:nrh_project/Pagees/Sign_Up_Step1.dart';
 import 'package:nrh_project/components/button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),
@@ -97,7 +99,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   color: Color((0xFF7152F3)),
                   colortext: Color((0xFFFFFFFF)),
                   title: 'Sign Up',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, Sign_up_1.screenRoute);
+                  },
                 ),
                 SizedBox(height: 15),
                 Button(

@@ -145,7 +145,7 @@ class _sign_up_3State extends State<sign_up_3> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.name,
                     controller: _domainecontroller,
                     decoration: InputDecoration(
                       

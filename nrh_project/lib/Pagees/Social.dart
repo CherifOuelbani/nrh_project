@@ -31,9 +31,7 @@ class _SocialState extends State<Social> {
     if (index == 1) {
       Navigator.pushNamed(context, Social.screenRoute);
     }
-    if (index == 4) {
-      Navigator.pushNamed(context, Personnes.screenRoute);
-    }
+    
     if (index == 3) {
       Navigator.pushNamed(context, calendrier.screenRoute);
     }
@@ -48,6 +46,7 @@ class _SocialState extends State<Social> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         theme: ThemeData(
           textTheme: GoogleFonts.lexendTextTheme(),
         ),

@@ -75,7 +75,7 @@ class _OTPpageState extends State<OTPpage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),

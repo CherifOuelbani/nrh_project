@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:nrh_project/Pagees/Absences_1.dart';
-import 'package:nrh_project/Pagees/CompanyProfile.dart';
-import 'package:nrh_project/Pagees/Personnal_info.dart';
-import 'package:nrh_project/Pagees/Settings.dart';
+import 'package:nrh_project/Pagees/Personnes_page.dart';
+import 'package:nrh_project/Pagees/Reset_pswrd.dart';
+import 'package:nrh_project/Pagees/calendrier.dart';
+import 'package:nrh_project/Pagees/welcome_page.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:nrh_project/components/button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -25,39 +24,32 @@ class _LoginState extends State<Login> {
   bool _isChecked = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscureText = true;
   String? validateEmail(String? value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern.toString());
+    RegExp regex = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!regex.hasMatch(value!))
       return 'Enter Valid Email';
     else
       return null;
   }
 
-  // Add the login function here
   Future<bool> login(String email, String password) async {
-    final Uri url = Uri.parse(
-        'http://10.0.2.2:5000/api/login'); // Replace with your actual endpoint
+    final Uri url = Uri.parse('http://10.0.2.2:5000/api/login');
     try {
       final response = await http.post(
         url,
         headers: const {'Content-Type': 'application/json'},
         body: jsonEncode({'emailorcin': email, 'password': password}),
       );
-      print(response.body);
+      //print(response.body);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        final String token =
-            responseData['token']; // Extracting the token from the response
-        Navigator.push(
-          context,
-          CupertinoPageRoute(builder: (context) => Absence_1()),
-        );
-        // Decode the token to get user information
+        final String token = responseData['token'];
+        Navigator.popAndPushNamed(context, Absence_1.screenRoute);
+
         Map<String, dynamic> userInfo = Jwt.parseJwt(token);
 
-        // Save the token and user information using SharedPreferences for later use
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('userInfo', json.encode(userInfo));
@@ -120,15 +112,16 @@ class _LoginState extends State<Login> {
                   ),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, WelcomeScreen.screenRoute);
+                    },
                     style: ButtonStyle(
                       overlayColor: MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed)) {
-                            return Colors
-                                .transparent; // Return a transparent color for the pressed state
+                            return Colors.transparent;
                           }
-                          return null; // For other states, return null which uses the default overlay color
+                          return null;
                         },
                       ),
                     ),
@@ -179,9 +172,7 @@ class _LoginState extends State<Login> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
                           hintText: "enter your email",
-                          prefixIcon: Icon(Icons.email,
-                              color: Colors
-                                  .grey), // Use prefixIcon instead of icon
+                          prefixIcon: Icon(Icons.email, color: Colors.grey),
                         ),
                         validator: validateEmail,
                       ),
@@ -205,14 +196,26 @@ class _LoginState extends State<Login> {
                       child: TextFormField(
                         controller: _passwordController,
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
+                        obscureText: _obscureText,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          hintText: "enter your password",
-                          prefixIcon: Icon(Icons.lock,
-                              color: const Color.fromARGB(255, 225, 225, 225)),
-                        ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            hintText: "enter your password",
+                            prefixIcon: Icon(Icons.lock,
+                                color:
+                                    const Color.fromARGB(255, 225, 225, 225)),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            )),
                         validator: (password) => password!.length < 8
                             ? 'please enter a valid password'
                             : null,
@@ -245,7 +248,9 @@ class _LoginState extends State<Login> {
                     ),
                     Spacer(),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, ResetPswrd.screenRoute);
+                      },
                       child: Text(
                         'Forgot Password?',
                         style: TextStyle(
@@ -257,10 +262,9 @@ class _LoginState extends State<Login> {
                         overlayColor: MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.pressed)) {
-                              return Colors
-                                  .transparent; // Return a transparent color for the pressed state
+                              return Colors.transparent;
                             }
-                            return null; // For other states, return null which uses the default overlay color
+                            return null;
                           },
                         ),
                       ),
@@ -291,7 +295,7 @@ class _LoginState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.only(right: 25.0),
                     child: Container(
-                      width: 150, // adjust this value as needed
+                      width: 150,
                       child: Divider(
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
@@ -347,7 +351,6 @@ class _LoginState extends State<Login> {
                   color: Color((0xFF7152F3)),
                   colortext: Color((0xFFFFFFFF)),
                   title: 'Log In',
-                  // Inside your Button's onPressed callback
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final email = _emailController.text;
@@ -357,9 +360,7 @@ class _LoginState extends State<Login> {
 
                       if (isLoggedIn) {
                         print("good");
-                        // Navigate to your home screen or another appropriate screen
                       } else {
-                        // Show an error message using a dialog
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -371,8 +372,7 @@ class _LoginState extends State<Login> {
                                 TextButton(
                                   child: Text("OK"),
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Dismiss the dialog
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                               ],

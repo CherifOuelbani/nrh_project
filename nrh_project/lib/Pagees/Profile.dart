@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),
@@ -54,7 +55,7 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.only(left: 15.0, top: 55),
                       child: IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, Personnes.screenRoute);
+                           
                           },
                           icon: Icon(Icons.arrow_back_ios, size: 25.0)),
                     ),

@@ -9,7 +9,6 @@ import 'package:nrh_project/Pagees/Personnes_page.dart';
 import 'package:nrh_project/Pagees/Splash_Screen.dart';
 import 'pagees/Social.dart';
 
-import 'Pagees/Personnes_page.dart';
 import 'Pagees/Reset_pswrd.dart';
 import 'Pagees/welcome_page.dart';
 import 'Pagees/Login_page.dart';
@@ -35,17 +34,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'NRH',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
-      //initialRoute: WelcomeScreen.screenRoute,
+      home: SplashScreen(),
+      
       routes: {
         WelcomeScreen.screenRoute: (context) => WelcomeScreen(),
+        Absence_1.screenRoute: (context) => Absence_1(),
         Login.screenRoute: (context) => Login(),
         ResetPswrd.screenRoute: (context) => ResetPswrd(),
         SplashScreen.screenRoute: (context) => SplashScreen(),
@@ -53,7 +55,9 @@ class MyApp extends StatelessWidget {
         Personnes.screenRoute: (context) => Personnes(),
         Social.screenRoute: (context) => Social(),
         AddArticle.screenRoute: (context) => AddArticle(),
+        Sign_up_1.screenRoute: (context) => Sign_up_1(),
         calendrier.screenRoute: (context) => calendrier(),
+        Settings.screenRoute: (context) => Settings(),
         OTPpage.screenRoute: (context) {
           final args = ModalRoute.of(context)!.settings.arguments
               as Map<String, dynamic>;

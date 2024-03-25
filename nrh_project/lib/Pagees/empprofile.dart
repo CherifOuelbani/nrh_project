@@ -14,7 +14,7 @@ class _empageState extends State<empage> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> employeeData = widget.employeeData;
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),
@@ -31,7 +31,7 @@ class _empageState extends State<empage> {
                       padding: const EdgeInsets.only(left: 15.0, top: 55),
                       child: IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, Personnes.screenRoute);
+                           
                           },
                           icon: Icon(Icons.arrow_back_ios, size: 25.0)),
                     ),

@@ -74,8 +74,8 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
 
   void _saveChanges() async {
     // Get the edited values from the text field controllers
-    String firstName = _firstNameController.text;
-    String lastName = _lastNameController.text;
+    String firstname = _firstNameController.text;
+    String lastname = _lastNameController.text;
     String email = _emailController.text;
     String cin = _cinController.text;
     String phoneNumber = _phoneNumberController.text;
@@ -100,8 +100,8 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
           'Authorization': '$token',
         },
         body: jsonEncode(<String, dynamic>{
-          'firstName': firstName,
-          'secondName': lastName,
+          'firstname': firstname,
+          'secondname': lastname,
           'email': email,
           'cin': cin,
           'phoneNumber': phoneNumber,

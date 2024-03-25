@@ -21,31 +21,34 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 159.0),
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 5,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("images/team.png"),
+    return MaterialApp(debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 159.0),
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 5,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/team.png"),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 37,
-              ),
-              Text(
-                "NRH",
-                style: TextStyle(
-                    color: Color.fromARGB(179, 6, 51, 164),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 46.0),
-              ),
-            ],
+                SizedBox(
+                  height: 37,
+                ),
+                Text(
+                  "NRH",
+                  style: TextStyle(
+                      color: Color.fromARGB(179, 6, 51, 164),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 46.0),
+                ),
+              ],
+            ),
           ),
         ),
       ),

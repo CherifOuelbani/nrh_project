@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nrh_project/Pagees/Absences_1.dart';
 import 'package:nrh_project/components/NavBar.dart';
 import 'package:nrh_project/Pagees/Social.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
@@ -21,8 +22,7 @@ class _calendrierState extends State<calendrier> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex =
-        3; 
+    _selectedIndex = 3;
   }
 
   void _onItemTapped(int index) {
@@ -32,17 +32,18 @@ class _calendrierState extends State<calendrier> {
     if (index == 1) {
       Navigator.pushNamed(context, Social.screenRoute);
     }
-    if (index == 4) {
-      Navigator.pushNamed(context, Personnes.screenRoute);
-    }
+
     if (index == 3) {
       Navigator.pushNamed(context, calendrier.screenRoute);
+    }
+    if (index == 2) {
+      Navigator.pushNamed(context, Absence_1.screenRoute);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),

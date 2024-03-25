@@ -34,7 +34,7 @@ class _ProffesionallInfoState extends State<ProffesionallInfo> {
   final String? token = prefs.getString('token');
 
   if (token == null) {
-    // Handle token not found
+   
     return;
   }
 
@@ -48,7 +48,7 @@ class _ProffesionallInfoState extends State<ProffesionallInfo> {
     });
   } catch (error) {
     print('Failed to decode token: $error');
-    // Handle error
+   
   }
 }
   Widget build(BuildContext context) {

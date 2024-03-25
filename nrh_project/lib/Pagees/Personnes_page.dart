@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 class Personnes extends StatefulWidget {
   const Personnes({Key? key}) : super(key: key);
-  static const String screenRoute = 'Personnes_page';
+  static const String screenRoute = 'Personne_page';
 
   @override
   _PersonnesState createState() => _PersonnesState();
@@ -22,13 +22,13 @@ class Personnes extends StatefulWidget {
 class _PersonnesState extends State<Personnes> {
   Map<String, dynamic> data = {};
   int _selectedIndex = 0;
-  List<dynamic> employees = []; 
+  List<dynamic> employees = [];
 
   @override
   void initState() {
     super.initState();
     _loadUserInformation();
-    _fetchAndSetEmployees(); 
+    _fetchAndSetEmployees();
     _selectedIndex = 4;
   }
 
@@ -39,9 +39,7 @@ class _PersonnesState extends State<Personnes> {
     if (index == 1) {
       Navigator.pushNamed(context, Social.screenRoute);
     }
-    if (index == 4) {
-      Navigator.pushNamed(context, Personnes.screenRoute);
-    }
+
     if (index == 3) {
       Navigator.pushNamed(context, calendrier.screenRoute);
     }
@@ -70,8 +68,7 @@ class _PersonnesState extends State<Personnes> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
     print("Token: $token");
-    final Uri url = Uri.parse(
-        'http://10.0.2.2:5000/api/employees/'); 
+    final Uri url = Uri.parse('http://10.0.2.2:5000/api/employees/');
 
     try {
       final response = await http.get(
@@ -100,6 +97,7 @@ class _PersonnesState extends State<Personnes> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),
@@ -140,10 +138,8 @@ class _PersonnesState extends State<Personnes> {
                   decoration: InputDecoration(
                     fillColor: Color.fromARGB(255, 255, 255, 255),
                     filled: true,
-                    
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10.0), 
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 10.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide:
@@ -187,16 +183,13 @@ class _PersonnesState extends State<Personnes> {
                   right: 18,
                 ),
                 child: ListView.builder(
-                  shrinkWrap:
-                      true, 
-                  physics:
-                      NeverScrollableScrollPhysics(), 
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: employees.length,
                   itemBuilder: (context, index) {
                     var employee = employees[index];
                     return Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 1),
+                      padding: const EdgeInsets.only(bottom: 1),
                       child: Personne(
                           picture: ClipOval(
                             child: Image.network(
@@ -206,16 +199,12 @@ class _PersonnesState extends State<Personnes> {
                               width: 45,
                               errorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
-                                
-                                return const Icon(
-                                    Icons.error); 
+                                return const Icon(Icons.error);
                               },
                             ),
                           ),
-                          firstname: employee['firstname'] ??
-                              'Unknown', 
-                          secondname: employee['lastname'] ??
-                              'Unknown', 
+                          firstname: employee['firstname'] ?? 'Unknown',
+                          secondname: employee['lastname'] ?? 'Unknown',
                           onPressed: () {
                             Navigator.push(
                               context,

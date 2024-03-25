@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
 import 'package:nrh_project/Pagees/RequestAbsence.dart';
+import 'package:nrh_project/Pagees/Settings.dart';
 import 'package:nrh_project/Pagees/Sign_Up_Step1.dart';
 import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
 import 'package:nrh_project/Pagees/Social.dart';
@@ -11,10 +12,10 @@ import 'package:nrh_project/Pagees/calendrier.dart';
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/textfield.dart';
 import 'package:http/http.dart' as http;
-import 'package:nrh_project/components/NavBar.dart';
 
 class Absence_1 extends StatefulWidget {
   const Absence_1({super.key});
+  static const String screenRoute = 'absence';
 
   @override
   State<Absence_1> createState() => _Absence_1State();
@@ -25,36 +26,124 @@ class _Absence_1State extends State<Absence_1> {
   int _selectedIndex = 0;
   void initState() {
     super.initState();
-    _selectedIndex =2 ;
+    _selectedIndex = 2;
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-
     });
-    if (index == 1) {
-      Navigator.pushNamed(context, Social.screenRoute);
-    }
-
-    if (index == 3) {
-      Navigator.pushNamed(context, calendrier.screenRoute);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    void _showItemSelection(BuildContext context) {
+      Widget _buildAdditionalItem(
+          BuildContext context, IconData icon, String itemName, Color color) {
+        return GestureDetector(
+          onTap: () {
+            if (itemName == 'Settings') {
+              Navigator.pushNamed(context, Settings.screenRoute);
+            } else if (itemName == 'Personnes') {
+              Navigator.pushNamed(context, Personnes.screenRoute);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(icon, color: Color.fromARGB(255, 87, 87, 87)),
+              SizedBox(height: 4),
+              Text(itemName,
+                  style: TextStyle(color: Color.fromARGB(255, 87, 87, 87))),
+            ],
+          ),
+        );
+      }
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _buildAdditionalItem(context, Icons.settings, 'Settings',
+                    Color.fromARGB(255, 87, 87, 87)),
+                _buildAdditionalItem(context, Icons.person, 'Personnes',
+                    Color.fromARGB(255, 87, 87, 87)),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    List<BottomNavigationBarItem> getBottomNavBarItems() {
+      List<BottomNavigationBarItem> items = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.timer_outlined),
+          label: "Pointer",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.people_outlined),
+          label: "Social",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          label: "Absence",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_month_outlined),
+          label: "Calendar",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.widgets_outlined),
+          label: "Plus",
+        ),
+      ];
+
+      return items;
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.lexendTextTheme(),
       ),
       home: Scaffold(
-        bottomNavigationBar: BottomNavBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ),
         backgroundColor: Color.fromRGBO(249, 249, 249, 1),
+        bottomNavigationBar: Container(
+          height: 80,
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              if (index == 4) {
+                _showItemSelection(context);
+              } else {
+                _onItemTapped(index);
+              }
+              if (index == 1) {
+                Navigator.pushNamed(context, Social.screenRoute);
+              }
+
+              if (index == 3) {
+                Navigator.pushNamed(context, calendrier.screenRoute);
+              }
+              if (index == 2) {
+                Navigator.pushNamed(context, Absence_1.screenRoute);
+              }
+            },
+            backgroundColor: Colors.white,
+            selectedFontSize: 14,
+            unselectedFontSize: 14,
+            showUnselectedLabels: true,
+            selectedItemColor: Color.fromRGBO(113, 82, 243, 1),
+            unselectedItemColor: const Color.fromARGB(255, 87, 87, 87),
+            items: getBottomNavBarItems(),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
