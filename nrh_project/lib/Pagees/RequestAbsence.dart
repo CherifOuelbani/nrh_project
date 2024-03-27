@@ -4,12 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:nrh_project/Pagees/Absences_1.dart';
-import 'package:nrh_project/Pagees/Login_Page.dart';
-import 'package:nrh_project/Pagees/Sign_Up_Step1.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
-import 'package:nrh_project/components/button.dart';
-import 'package:nrh_project/components/textfield.dart';
-import 'package:http/http.dart' as http;
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';

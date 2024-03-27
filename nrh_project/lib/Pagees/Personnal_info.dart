@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:nrh_project/Pagees/Settings.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
-import 'package:nrh_project/components/button.dart';
-import 'package:nrh_project/components/textfield.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;

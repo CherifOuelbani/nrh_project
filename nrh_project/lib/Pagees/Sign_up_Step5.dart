@@ -2,14 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Login_page.dart';
-import 'package:nrh_project/Pagees/Sign_Up_Step1.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step3.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step4.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step5.dart';
+
 import 'package:nrh_project/components/button.dart';
 import 'package:nrh_project/components/pack.dart';
-import 'package:nrh_project/components/textfield.dart';
+
 
 class sign_up_5 extends StatefulWidget {
   sign_up_5({

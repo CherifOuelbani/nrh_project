@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/ModifyPswrd.dart';
 import 'package:nrh_project/Pagees/Reset_pswrd.dart';
 import 'package:nrh_project/components/button.dart';
-import 'package:nrh_project/Pagees/OTP.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

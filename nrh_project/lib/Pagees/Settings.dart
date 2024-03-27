@@ -6,13 +6,11 @@ import 'package:nrh_project/Pagees/CompanyProfile.dart';
 import 'package:nrh_project/Pagees/Login_Page.dart';
 import 'package:nrh_project/Pagees/Personnal_info.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
-import 'package:nrh_project/Pagees/Sign_up_Step2.dart';
+
 import 'package:nrh_project/Pagees/Social.dart';
 import 'package:nrh_project/Pagees/calendrier.dart';
 import 'package:nrh_project/Pagees/proffesional_Infi.dart';
-import 'package:nrh_project/components/button.dart';
-import 'package:nrh_project/components/textfield.dart';
-import 'package:validators/validators.dart';
+
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
