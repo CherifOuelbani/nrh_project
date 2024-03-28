@@ -57,12 +57,56 @@ class _PersonnesState extends State<Personnes> {
     }
   }
 
-  void _fetchAndSetEmployees() async {
+ void _fetchAndSetEmployees() async {
+  try {
+    // Refresh the token
+    await _refreshToken();
+
+    // Fetch employees using the updated token
     final fetchedEmployees = await fetchEmployees();
     setState(() {
       employees = fetchedEmployees;
     });
+  } catch (e) {
+    print('Error fetching employees: $e');
+    // Handle error, e.g., show an error message to the user
   }
+}
+
+Future<void> _refreshToken() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? refreshToken = prefs.getString('refreshToken');
+
+  if (refreshToken != null) {
+    final Uri url = Uri.parse('http://10.0.2.2:5000/api/refresh_token');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({'refreshToken': refreshToken}),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> tokenData = json.decode(response.body);
+        final String newToken = tokenData['token'];
+
+        // Save the new token
+        prefs.setString('token', newToken);
+      } else {
+        print('Failed to refresh token. Status code: ${response.statusCode}.');
+        throw Exception('Failed to refresh token');
+      }
+    } catch (e) {
+      print('Exception caught while refreshing token: $e');
+      throw Exception('Failed to refresh token: $e');
+    }
+  }
+}
+
 
   Future<List<dynamic>> fetchEmployees() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

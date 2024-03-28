@@ -27,13 +27,63 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
   TextEditingController _roleController = TextEditingController();
   bool _isEditing = false;
   bool _isEnable = false;
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserInfo();
+ @override
+void initState() {
+  super.initState();
+  _fetchUserInfo();
+}
+
+Future<void> _fetchUserInfo() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String? token = prefs.getString('token');
+
+  if (token == null) {
+    // Handle token not found
+    return;
   }
 
-  Future<void> _fetchUserInfo() async {
+  try {
+    final Map<String, dynamic> userInfo = Jwt.parseJwt(token);
+
+    setState(() {
+      _userInfo = userInfo;
+      _firstNameController.text = _userInfo!['firstname'] ?? '';
+      _lastNameController.text = _userInfo!['lastname'] ?? '';
+      _emailController.text = _userInfo!['email'] ?? '';
+      _cinController.text = _userInfo!['cin'] ?? '';
+      _phoneNumberController.text = _userInfo!['phonenumber'] ?? '';
+      _roleController.text = _userInfo!['role'] ?? '';
+    });
+  } catch (error) {
+    print('Failed to decode token: $error');
+    // Handle error
+  }
+  
+}
+
+Future<void> refreshUserInfo() async {
+  // Call your method to fetch user information
+  await _fetchUserInfo();
+}
+
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  // Call the method to refresh user information
+  refreshUserInfo();
+}
+
+void _saveChanges() async {
+  // Get the edited values from the text field controllers
+  String firstname = _firstNameController.text;
+  String lastname = _lastNameController.text;
+  String email = _emailController.text;
+  String cin = _cinController.text;
+  String phoneNumber = _phoneNumberController.text;
+  String role = _roleController.text;
+
+  // Perform API call to update user info
+  try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
 
@@ -42,100 +92,68 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
       return;
     }
 
-    try {
-      final Map<String, dynamic> userInfo = Jwt.parseJwt(token);
+    final response = await http.put(
+      Uri.parse('http://10.0.2.2:5000/api/update/personalinformation'), // Provide your update API endpoint
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': '$token',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'firstname': firstname,
+        'lastname': lastname,
+        'email': email,
+        'cin': cin,
+        'phoneNumber': phoneNumber,
+        'role': role,
+        // Add other fields as necessary
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      print('Response from server: $responseData');
+        final String token = responseData['token'];
+       
+
+        Map<String, dynamic> userInfo = Jwt.parseJwt(token);
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+        await prefs.setString('userInfo', json.encode(userInfo));
+
+      // Update successful, handle success scenario
       setState(() {
-        _userInfo = userInfo;
-        _firstNameController.text = _userInfo!['firstname'] ?? '';
-        _lastNameController.text = _userInfo!['lastname'] ?? '';
-        _emailController.text = _userInfo!['email'] ?? '';
-        _cinController.text = _userInfo!['cin'] ?? '';
-        _phoneNumberController.text = _userInfo!['phonenumber'] ?? '';
-        _roleController.text = _userInfo!['role'] ?? '';
+        _firstNameController.text = responseData['firstname'] ?? '';
+        _lastNameController.text = responseData['lastname'] ?? '';
+        _emailController.text = responseData['email'] ?? '';
+        _cinController.text = responseData['cin'] ?? '';
+        _phoneNumberController.text = responseData['phoneNumber'] ?? '';
+        _roleController.text = responseData['role'] ?? '';
+        _isEditing = false;
+
+        // Exit editing mode after saving changes
       });
-    } catch (error) {
-      print('Failed to decode token: $error');
-      // Handle error
+      
+
+      // Fetch updated user information to ensure it's up-to-date
+      await refreshUserInfo();
+
+      print('Updated!');
+    } else {
+      // Update failed, handle failure scenario
+      print('Failed to update user info: ${response.body}');
     }
+  } catch (error) {
+    print('Failed to update user info: $error');
+    // Handle error
   }
+}
 
-  Future<void> refreshUserInfo() async {
-    // Call your method to fetch user information
-    await _fetchUserInfo();
-  }
-
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Call the method to refresh user information
-    refreshUserInfo();
-  }
-
-  void _saveChanges() async {
-    // Get the edited values from the text field controllers
-    String firstname = _firstNameController.text;
-    String lastname = _lastNameController.text;
-    String email = _emailController.text;
-    String cin = _cinController.text;
-    String phoneNumber = _phoneNumberController.text;
-    String role = _roleController.text;
-
-    // Perform API call to update user info
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? token = prefs.getString('token');
-
-      if (token == null) {
-        // Handle token not found
-        return;
-      }
-
-      final response = await http.put(
-        Uri.parse(
-            'http://10.0.2.2:5000/api/update/personalinformation'), // Provide your update API endpoint
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': '$token',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'firstname': firstname,
-          'lastname': lastname,
-          'email': email,
-          'cin': cin,
-          'phoneNumber': phoneNumber,
-          'role': role,
-          // Add other fields as necessary
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        // Update successful, handle success scenario
-        setState(() {
-          _firstNameController.text = responseData['firstname'];
-          _lastNameController.text = responseData['lastname'];
-          _emailController.text = responseData['email'];
-          _cinController.text = responseData['cin'];
-          _phoneNumberController.text = responseData['phoneNumber'];
-          _roleController.text = responseData['role'];
-          _isEditing = false;
-
-          // Exit editing mode after saving changes
-        });
-
-        print('updated !');
-      } else {
-        // Update failed, handle failure scenario
-        print('Failed to update user info: ${response.body}');
-      }
-    } catch (error) {
-      print('Failed to update user info: $error');
-      // Handle error
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -422,7 +440,9 @@ class _PersonnalInfoState extends State<PersonnalInfo> {
                           onPressed: () {
                             if (_isEditing) {
                               _saveChanges();
+                               
                             }
+                            
                           },
                           child: Text('Save Changes'),
                         ),

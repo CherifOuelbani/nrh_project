@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:nrh_project/Pagees/Absences_1.dart';
 import 'package:nrh_project/Pagees/CompanyProfile.dart';
 import 'package:nrh_project/Pagees/Login_Page.dart';
@@ -10,6 +11,7 @@ import 'package:nrh_project/Pagees/Personnes_page.dart';
 import 'package:nrh_project/Pagees/Social.dart';
 import 'package:nrh_project/Pagees/calendrier.dart';
 import 'package:nrh_project/Pagees/proffesional_Infi.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Settings extends StatefulWidget {
@@ -20,6 +22,13 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+   Map<String, dynamic>? _userInfo;
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _cinController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _roleController = TextEditingController();
   int _selectedIndex = 0;
   bool _showAdditionalItems = false;
 
@@ -33,7 +42,39 @@ class _SettingsState extends State<Settings> {
       _selectedIndex = index;
     });
   }
+  Future<void> _fetchUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
 
+    if (token == null) {
+      // Handle token not found
+      return;
+    }
+
+    try {
+      final Map<String, dynamic> userInfo = Jwt.parseJwt(token);
+      setState(() {
+        _userInfo = userInfo;
+        _firstNameController.text = _userInfo!['firstname'] ?? '';
+        _lastNameController.text = _userInfo!['lastname'] ?? '';
+        _emailController.text = _userInfo!['email'] ?? '';
+        _cinController.text = _userInfo!['cin'] ?? '';
+        _phoneNumberController.text = _userInfo!['phonenumber'] ?? '';
+        _roleController.text = _userInfo!['role'] ?? '';
+      });
+    } catch (error) {
+      print('Failed to decode token: $error');
+      // Handle error
+    }
+  }
+void didChangeDependencies() {
+    super.didChangeDependencies();
+   _fetchUserInfo();
+  }
+  
+  Future<void> refreshUserInfo() async {
+    await _fetchUserInfo();
+  }
   @override
   Widget build(BuildContext context) {
     void _showItemSelection(BuildContext context) {
@@ -297,12 +338,15 @@ class _SettingsState extends State<Settings> {
                                   ),
                                   MaterialButton(
                                     onPressed: () {
+                                      
                                       Navigator.push(
                                         context,
                                         CupertinoPageRoute(
                                             builder: (context) =>
                                                 ProffesionallInfo()),
+ 
                                       );
+                                      
                                     },
                                     color: Colors.white,
                                     elevation: 0,

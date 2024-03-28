@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nrh_project/Pagees/Personnes_page.dart';
@@ -20,6 +22,8 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     _loadUserInformation();
+    fetchEmployees();
+    
   }
 
   void _loadUserInformation() async {
@@ -31,6 +35,37 @@ class _ProfileState extends State<Profile> {
       setState(() {
         employeeData = payload;
       });
+    }
+  }
+ 
+
+  Future<List<dynamic>> fetchEmployees() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+    print("Token: $token");
+    final Uri url = Uri.parse('http://10.0.2.2:5000/api/employees/');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': '$token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> employees = json.decode(response.body)['employees'];
+        return employees;
+      } else {
+        print(
+            'Failed to load employees. Status code: ${response.statusCode}. Response body: ${response.body}');
+        throw Exception('Failed to load employees');
+      }
+    } catch (e) {
+      print('Exception caught: $e');
+      throw Exception('Failed to load employees: $e');
     }
   }
 
